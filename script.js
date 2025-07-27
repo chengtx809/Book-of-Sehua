@@ -260,8 +260,10 @@ class TimBook {
         const totalAnimations = 20; // 增加切换次数
         const animationInterval = 150; // 减少间隔时间，更快切换
         
-        // 在动画开始时预加载当前音频
-        this.preloadAudio(result.audioFile);
+        // 在动画开始时预加载并设置音频，避免重复加载
+        const preloadedAudio = this.preloadAudio(result.audioFile);
+        this.audioPlayer.src = preloadedAudio.src;
+        console.log('动画开始时预加载并设置音频:', result.audioFile);
         
         const animationTimer = setInterval(() => {
             const randomTextIndex = Math.floor(Math.random() * this.sehuaTexts.length);
@@ -296,9 +298,8 @@ class TimBook {
         this.quoteText.textContent = result.text;
         this.quoteAuthor.textContent = `—— ${result.author}`;
         
-        // 点击时加载对应音频
-        this.audioPlayer.src = `sehua_audio/${result.audioFile}`;
-        console.log('点击时加载音频:', result.audioFile);
+        // 音频已经在动画开始时加载完成，直接播放
+        console.log('直接使用预加载的音频:', result.audioFile);
         
         // 播放音频
         this.audioPlayer.play().catch(error => {
