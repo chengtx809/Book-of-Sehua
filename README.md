@@ -36,7 +36,7 @@
 
 ```javascript
 this.audioData = {
-    "sehua_1.mp3": {
+    "sehua_1.MP3": {
         "text": "遇不到志同道合的伙伴，是不是因为我太弱，太奇怪",
         "author": "Tim"
     },
