@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tim涩话之书</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Tim涩话之书</h1>
+        
+        <div class="image-container">
+            <img src="img/tim.png" alt="Tim" class="tim-image" id="timImage">
+        </div>
+        
+        <div class="card-overlay" id="cardOverlay">
+            <div class="text-card" id="textCard">
+                <div class="card-content">
+                    <p class="quote-text" id="quoteText"></p>
+                    <p class="quote-author" id="quoteAuthor"></p>
+                </div>
+                <button class="close-btn" id="closeBtn">×</button>
+            </div>
+        </div>
+        
+        <audio id="audioPlayer" preload="auto"></audio>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
