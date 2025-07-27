@@ -102,25 +102,21 @@ class TimBook {
         // 禁用点击，防止重复触发
         this.timImage.style.pointerEvents = 'none';
         
-        // 添加抽取动画效果
-        this.timImage.classList.add('extracting');
-        this.timImage.classList.add('shake');
-        
-        // 显示抽取指示器
-        this.extractionIndicator.classList.add('active');
+        // 添加旋转动画效果
+        this.timImage.classList.add('spin');
         
         // 立即抽取涩话
         const result = this.selectRandomSehua();
         
-        // 延迟开始动画效果，让用户看到抽取动画
+        // 预加载音频
+        const preloadedAudio = this.preloadAudio(result.audioFile);
+        this.audioPlayer.src = preloadedAudio.src;
+        
+        // 旋转动画完成后直接显示结果并播放音频
         setTimeout(() => {
-            this.timImage.classList.remove('shake');
-            this.timImage.classList.add('spin');
-            
-            setTimeout(() => {
-                this.startAnimation(result);
-            }, 400);
-        }, 500);
+            this.showCard();
+            this.finalizeAnimation(result);
+        }, 800); // 与旋转动画时长一致
     }
     
     selectRandomSehua() {
@@ -231,67 +227,17 @@ class TimBook {
             this.currentAnimationTimer = null;
         }
         
-        // 隐藏抽取指示器（如果还在显示）
-        this.extractionIndicator.classList.remove('active');
-        
-        // 移除所有动画类
-        this.timImage.classList.remove('extracting', 'shake', 'spin');
+        // 移除旋转动画类
+        this.timImage.classList.remove('spin');
         
         // 重新启用点击
         this.timImage.style.pointerEvents = 'auto';
     }
     
-    startAnimation(result) {
-        // 隐藏抽取指示器
-        this.extractionIndicator.classList.remove('active');
-        
-        // 显示卡片
-        this.showCard();
-        
-        // 添加动画类
-        this.textCard.classList.add('animating');
-        
-        // 设置初始状态
-        this.quoteText.textContent = '';
-        this.quoteAuthor.textContent = '';
-        
-        // 开始快速切换动画
-        let animationCount = 0;
-        const totalAnimations = 20; // 增加切换次数
-        const animationInterval = 150; // 减少间隔时间，更快切换
-        
-        // 在动画开始时预加载并设置音频，避免重复加载
-        const preloadedAudio = this.preloadAudio(result.audioFile);
-        this.audioPlayer.src = preloadedAudio.src;
-        console.log('动画开始时预加载并设置音频:', result.audioFile);
-        
-        const animationTimer = setInterval(() => {
-            const randomTextIndex = Math.floor(Math.random() * this.sehuaTexts.length);
-            this.quoteText.textContent = this.sehuaTexts[randomTextIndex];
-            this.quoteAuthor.textContent = '—— 抽取中...';
-            
-            // 添加闪烁效果
-            this.quoteText.style.animation = 'none';
-            setTimeout(() => {
-                this.quoteText.style.animation = 'textFlash 0.15s ease-in-out';
-            }, 10);
-            
-            animationCount++;
-            
-            if (animationCount >= totalAnimations) {
-                clearInterval(animationTimer);
-                this.textCard.classList.remove('animating');
-                this.finalizeAnimation(result);
-            }
-        }, animationInterval);
-        
-        // 保存定时器引用以便清理
-        this.currentAnimationTimer = animationTimer;
-    }
+    // 移除startAnimation方法，因为不再需要文字滚动效果
     
     finalizeAnimation(result) {
-        // 移除抽取动画效果
-        this.timImage.classList.remove('extracting');
+        // 移除旋转动画效果
         this.timImage.classList.remove('spin');
         
         // 显示最终结果

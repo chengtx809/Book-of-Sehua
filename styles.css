@@ -199,53 +199,10 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-.text-card.animating .quote-text {
-    animation: textFlash 0.2s ease-in-out;
-}
-
-.tim-image.extracting {
-    animation: pulse 0.5s ease-in-out infinite, glow 0.5s ease-in-out infinite;
-}
-
-.tim-image.shake {
-    animation: shake 0.5s ease-in-out;
-}
+/* 移除文字滚动动画相关样式 */
 
 .tim-image.spin {
     animation: spin 0.8s ease-in-out;
-}
-
-/* 抽取指示器 */
-.extraction-indicator {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 20px 40px;
-    border-radius: 50px;
-    font-size: 1.2rem;
-    z-index: 2000;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-}
-
-.extraction-indicator.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.extraction-indicator .spinner {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-top: 3px solid white;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-right: 10px;
 }
 
 /* 点击禁用状态 */
