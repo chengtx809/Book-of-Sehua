@@ -9,6 +9,7 @@ class TimBook {
         this.quoteAuthor = document.getElementById('quoteAuthor');
         this.closeBtn = document.getElementById('closeBtn');
         this.extractionIndicator = document.getElementById('extractionIndicator');
+        this.preloadedAudios = {}; // 缓存预加载的音频对象
         
         this.init();
     }
@@ -16,6 +17,8 @@ class TimBook {
     async init() {
         await this.loadAudioData();
         this.bindEvents();
+        // 不再预加载所有音频，改为按需加载
+        console.log('音频加载策略：按需加载');
     }
     
     async loadAudioData() {
@@ -78,11 +81,8 @@ class TimBook {
         // 显示抽取指示器
         this.extractionIndicator.classList.add('active');
         
-        // 立即抽取涩话并预加载音频
+        // 立即抽取涩话
         const result = this.selectRandomSehua();
-        
-        // 预加载音频
-        this.preloadAudio(result.audioFile);
         
         // 延迟开始动画效果，让用户看到抽取动画
         setTimeout(() => {
@@ -109,9 +109,28 @@ class TimBook {
     }
     
     preloadAudio(audioFile) {
+        // 如果已经预加载过，直接返回
+        if (this.preloadedAudios[audioFile]) {
+            return this.preloadedAudios[audioFile];
+        }
+        
+        // 创建新的音频对象并预加载
         const audio = new Audio(`sehua_audio/${audioFile}`);
+        audio.preload = 'auto';
+        
+        // 缓存音频对象
+        this.preloadedAudios[audioFile] = audio;
+        
+        // 开始加载
         audio.load();
-        console.log('预加载音频:', audioFile);
+        console.log('动画过程中预加载音频:', audioFile);
+        
+        return audio;
+    }
+    
+    preloadAllAudios() {
+        // 移除预加载所有音频的方法，改为按需加载
+        console.log('preloadAllAudios 方法已废弃，使用按需加载策略');
     }
     
     playRandomAudio() {
@@ -213,6 +232,9 @@ class TimBook {
         const totalAnimations = 20; // 增加切换次数
         const animationInterval = 150; // 减少间隔时间，更快切换
         
+        // 在动画开始时预加载当前音频
+        this.preloadAudio(result.audioFile);
+        
         const animationTimer = setInterval(() => {
             const randomTextIndex = Math.floor(Math.random() * this.sehuaTexts.length);
             this.quoteText.textContent = this.sehuaTexts[randomTextIndex];
@@ -246,8 +268,11 @@ class TimBook {
         this.quoteText.textContent = result.text;
         this.quoteAuthor.textContent = `—— ${result.author}`;
         
-        // 设置音频并播放
+        // 点击时加载对应音频
         this.audioPlayer.src = `sehua_audio/${result.audioFile}`;
+        console.log('点击时加载音频:', result.audioFile);
+        
+        // 播放音频
         this.audioPlayer.play().catch(error => {
             console.error('播放音频失败:', error);
         });
